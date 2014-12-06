@@ -1,0 +1,150 @@
+Contents of each CSV.
+
+Note: There are 2 lines of comments at the beginning of each CSV file. These
+lines begin with "##".
+
+Certain entities are split into separate files to remove the need to escape
+commas in user-inputted text (ex. post body, comment text). For these files,
+the appropriate ID is given, then one comma, then the text. So, every comma
+after the first comma is part of the text.
+
+********************************************************************************
+
+Users.xml -> users.csv
+Lines of CSV data: 3,473,094
+
+Originally contained:
+- Id
+- Reputation
+- CreationDate
+- DisplayName
+- EmailHash
+- LastAccessDate
+- WebsiteUrl
+- Location
+- Age
+- AboutMe
+- Views
+- UpVotes
+- DownVotes
+- AccountId
+
+Parsed:
+- Id
+- Reputation
+- Age
+- Views
+- UpVotes
+- DownVotes
+- AccountId
+
+********************************************************************************
+
+Tags.xml -> tags.csv
+Lines of CSV data: 38,205
+
+Originally contained:
+- Id
+- TagName
+- Count
+- ExcerptPostId
+- WikiPostId
+
+Parsed:
+- Id
+- TagName
+- Count
+
+********************************************************************************
+
+Posts.xml -> posts-meta.csv, posts-title.csv, posts-body.csv, posts-tags.csv
+Lines of CSV data: 21,736,594
+
+Originally contained:
+- Id
+- PostTypeId (1 = Question, 2 = Answer)
+- ParentId (only present if PostTypeId is 2)
+- AcceptedAnswerId (only present if PostTypeId is 1)
+- CreationDate
+- Score
+- ViewCount
+- Body
+- OwnerUserId
+- LastEditorUserId
+- LastEditorDisplayName="Jeff Atwood"
+- LastEditDate="2009-03-05T22:28:34.823"
+- LastActivityDate="2009-03-11T12:51:01.480"
+- CommunityOwnedDate="2009-03-11T12:51:01.480"
+- ClosedDate="2009-03-11T12:51:01.480"
+- Title=
+- Tags=
+- AnswerCount
+- CommentCount
+- FavoriteCount
+
+Parsed (posts-meta.csv):
+- Id
+- PostTypeId
+- ParentId
+- AcceptedAnswerId
+- CreationDate
+- Score
+- ViewCount
+- OwnerUserId
+- AnswerCount
+- CommentCount
+
+Parsed (posts-title.csv):
+- Id
+- Title
+
+Parsed (posts-body.csv):
+- Id
+- Body
+
+Parsed (posts-tags.csv):
+- Id
+- Tags
+
+********************************************************************************
+
+Comments.xml -> comments-meta.csv, comments-text.csv
+Lines of CSV data: 32,506,636
+
+Originally contained:
+- Id
+- PostId
+- Score
+- Text
+- CreationDate
+- UserId
+
+Parsed (comments-meta.csv):
+- Id
+- PostId
+- Score
+- CreationDate
+- UserId
+
+Parsed (comments-text.csv):
+- Id
+- Text
+
+********************************************************************************
+
+PostLinks.xml -> postlinks.csv
+Lines of CSV data: 1,947,917
+
+Originally contained:
+- Id
+- CreationDate
+- PostId
+- RelatedPostId
+- LinkTypeId (1 = Linked, 3 = Duplicate)
+
+Parsed:
+- Id
+- CreationDate
+- PostId
+- RelatedPostId
+- LinkTypeId
