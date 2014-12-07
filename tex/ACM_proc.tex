@@ -1,0 +1,103 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{acm_proc_article-sp}
+
+\begin{document}
+
+\title{A Sample {\ttlit ACM} SIG Proceedings Paper in LaTeX}
+\subtitle{[Extended Abstract]}
+
+\numberofauthors{4} 
+\author{
+\alignauthor
+Author One\titlenote{Now on postdoctoral fellow at ABC University}\\
+       \affaddr{Institute One}\\
+       \affaddr{Address One}\\
+       \email{author.one@emails.com}
+\alignauthor
+Author Two\\
+       \affaddr{Institute Two}\\
+       \affaddr{Address Two}\\
+       \email{author.two@emails.com}
+\and % go to new row
+\alignauthor
+Author Three\\
+       \affaddr{Institute Three}\\
+       \affaddr{Address Three}\\
+       \email{author.three@emails.com}
+\alignauthor
+Author Four\\
+       \affaddr{Institute Four}\\
+       \affaddr{Address Four}\\
+       \email{author.four@emails.com}
+}
+
+\date{20 April 2013}
+
+
+\maketitle
+\begin{abstract}
+Abstract text. Abstract text. Abstract text. Abstract text. Abstract text. Abstract text. Abstract text. 
+\end{abstract}
+
+% A category with the (minimum) three required fields
+\category{H.4}{Information Systems Applications}{Miscellaneous}
+%A category including the fourth, optional field follows...
+\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+\terms{Theory}
+
+\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+
+\section{Introduction}
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+Sample text. Sample text. Sample text. Sample text. Sample text. Sample text. 
+
+Citation of Einstein paper~\cite{Einstein}.
+
+\section{Results and Discussions}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\bibliographystyle{abbrv}
+\bibliography{sample}
+
+%\balancecolumns 
+
+\end{document}
