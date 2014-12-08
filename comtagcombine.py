@@ -46,7 +46,7 @@ def resetModels():
   similarityDCache = {}
 
 
-def computeComTagCombineD(alpha, beta, gamma, delta, question):
+def computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions):
   comTagCombineD = {}
 
   # Tag Term. Stores stuff in cache so we don't have to recompute more than once per question.
@@ -61,7 +61,7 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question):
     multiLabelDCache[question.id] = multiLabelD
     tagTermD = tagaffinity.getTagTermBasedRankingScores(body, tagaff_ttas, topTags)
     tagTermDCache[question.id] = tagTermD
-    similarityD = similarity.getSimilarityRankingScores(question.id, questions, wordVecs, sim_model, topTags)
+    similarityD = similarity.getSimilarityRankingScores(question.id, trainQuestions, wordVecs, sim_model, topTags)
     similarityDCache[question.id] = similarityD
 
   for t in topTags:
@@ -100,7 +100,7 @@ def comTagCombineModelTrain(trainQuestions):
   mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
   print "Naive Bayes Training Complete"
   print "Begin Tag Affinity Training"
-  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, False, frequentWords)
+  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False, frequentWords=frequentWords)
   print "Tag Affinity Training Complete"
   sim_model = similarity.similarityModel(trainQuestions, wordVecs)
   print "Similarity Training Complete"
@@ -110,23 +110,23 @@ def comTagCombineModelTrain(trainQuestions):
 Evaluates the recall@5 and recall@10 scores using the input parameters for each
 on the input test data set. Returns the recall@5 score and the recall@10 score.
 """
-def comTagCombineModelTest(testQuestions, outfile=None):
+def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
   best_recall_5_avg, best_recall_10_avg = 0.0, 0.0
   bestParams5 = [-1.0, -1.0, -1.0, -1.0]
   bestParams10 = [-1.0, -1.0, -1.0, -1.0]
-  for alpha in xrange(3):
-    alpha = alpha * 0.5
-    for beta in xrange(3):
-      beta = beta * 0.5
-      for gamma in xrange(3):
-        gamma = gamma * 0.5
-        for delta in xrange(3):
-          delta = delta * 0.5
+  for alpha in xrange(6):
+    alpha = alpha * 0.2
+    for beta in xrange(6):
+      beta = beta * 0.2
+      for gamma in xrange(6):
+        gamma = gamma * 0.2
+        for delta in xrange(6):
+          delta = delta * 0.2
 
           recall_5_sum = 0.0
           recall_10_sum = 0.0
           for (qid, question) in testQuestions.items():
-            comTagCombineD = computeComTagCombineD(alpha, beta, gamma, delta, question)
+            comTagCombineD = computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions)
             sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
             num = min(10, len(sortedTags))
             topTags = sortedTags[0:num]
@@ -149,25 +149,25 @@ def comTagCombineModelTest(testQuestions, outfile=None):
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
-## Comment out this block if running from Python shell
-# ld.loadData()
-# folds = ld.getCVFolds()
-# print 'Generating word vectors'
-# frequentWords, wordToIndex = wordvectors.getFrequentWords(ld.questions)
-# wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
+## Comment out this block if not running from Python shell
+ld.loadData()
+folds = ld.getCVFolds()
+print 'Generating word vectors'
+frequentWords, wordToIndex = wordvectors.getFrequentWords(ld.questions)
+wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
 for fold in folds:
   resetModels()
   counter += 1
-  outfile = open('temp/ctc-out_%d.csv' % counter, 'w+')
   print 'Starting Fold %d' % counter
   trainQuestions = fold[0]
   print 'Fold size %d' % len(fold[0])
   comTagCombineModelTrain(trainQuestions)
   testQuestions = fold[1]
-  params5, score5, params10, score10 = comTagCombineModelTest(testQuestions, outfile)
+  outfile = open('temp/ctc-out_%d.csv' % counter, 'w+')
+  params5, score5, params10, score10 = comTagCombineModelTest(trainQuestions, testQuestions, outfile)
   print "Test Values for Run #%d:" % counter
   print "recall@5 params: " + str(params5)
   print "recall@5 score: " + str(score5)
