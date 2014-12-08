@@ -25,6 +25,11 @@ tagaff_ttas = {}
 tagTermDCache = {}
 
 
+def resetModels():
+  tagaff_ttas = {}
+  tagTermDCache = {}
+
+
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
   comTagCombineD = {}
 
@@ -113,6 +118,7 @@ def comTagCombineModelTest(testQuestions):
 counter = 0
 recall_test_scores = [0.0, 0.0]
 for fold in folds:
+  resetModels()
   counter += 1
   trainQuestions = fold[0]
   comTagCombineModelTrain(trainQuestions)
