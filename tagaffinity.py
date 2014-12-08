@@ -17,9 +17,10 @@ posts_body_file = 'data/posts-body.csv'
 #    Look up tagID in dict.
 #    If exists, then get score. Otherwise 0.
 # Returns tagCounts as well. Map from tagID : # posts it appeared. Only if >= 50
-def getTagTermAffinityScores(questions, includeCounts=True):
+def getTagTermAffinityScores(questions, includeCounts=True, frequentWords=None):
   # print 'Computing TagAffinity model on %d questions' % len(questions)
-  frequentWords = set(wordvectors.getFrequentWords(questions)[0])
+  if not frequentWords:
+    frequentWords = set(wordvectors.getFrequentWords(questions)[0])
   ttas = {}
   tagCounts = {}
   infile_body = codecs.open(posts_body_file, 'r', 'utf-8')

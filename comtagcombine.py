@@ -4,6 +4,7 @@ import json
 import nbtext
 import tagaffinity
 import similarity
+import wordvectors
 
 posts_body_file = 'data/posts-body.csv'
 posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
@@ -99,7 +100,7 @@ def comTagCombineModelTrain(trainQuestions):
   mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
   print "Naive Bayes Training Complete"
   print "Begin Tag Affinity Training"
-  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
+  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, False, frequentWords)
   print "Tag Affinity Training Complete"
   sim_model = similarity.similarityModel(trainQuestions, wordVecs)
   print "Similarity Training Complete"
@@ -109,7 +110,7 @@ def comTagCombineModelTrain(trainQuestions):
 Evaluates the recall@5 and recall@10 scores using the input parameters for each
 on the input test data set. Returns the recall@5 score and the recall@10 score.
 """
-def comTagCombineModelTest(testQuestions):
+def comTagCombineModelTest(testQuestions, outfile=None):
   best_recall_5_avg, best_recall_10_avg = 0.0, 0.0
   bestParams5 = [-1.0, -1.0, -1.0, -1.0]
   bestParams10 = [-1.0, -1.0, -1.0, -1.0]
@@ -143,23 +144,30 @@ def comTagCombineModelTest(testQuestions):
             best_recall_10_avg = recall_10_avg
             updateParameters(alpha, beta, gamma, delta, bestParams10)
           print '(%f, %f, %f, %f): r5 = %f, r10 = %f' % (alpha, beta, gamma, delta, recall_5_avg, recall_10_avg)
+          if outfile:
+            outfile.write('%f,%f,%f,%f,%f,%f\n' % (alpha, beta, gamma, delta, recall_5_avg, recall_10_avg))
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
+## Comment out this block if running from Python shell
 # ld.loadData()
 # folds = ld.getCVFolds()
+# print 'Generating word vectors'
+# frequentWords, wordToIndex = wordvectors.getFrequentWords(ld.questions)
+# wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
 for fold in folds:
   resetModels()
   counter += 1
+  outfile = open('temp/ctc-out_%d.csv' % counter, 'w+')
   print 'Starting Fold %d' % counter
   trainQuestions = fold[0]
   print 'Fold size %d' % len(fold[0])
   comTagCombineModelTrain(trainQuestions)
   testQuestions = fold[1]
-  params5, score5, params10, score10 = comTagCombineModelTest(testQuestions)
+  params5, score5, params10, score10 = comTagCombineModelTest(testQuestions, outfile)
   print "Test Values for Run #%d:" % counter
   print "recall@5 params: " + str(params5)
   print "recall@5 score: " + str(score5)
@@ -167,6 +175,7 @@ for fold in folds:
   print "recall@10 score: " + str(score10)
   recall_test_scores[0] += score5
   recall_test_scores[1] += score10
+  outfile.close()
 
 print "Average Test Scores:"
 print "recall@5 score: " + str(recall_test_scores[0]/10)

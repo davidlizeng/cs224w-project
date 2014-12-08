@@ -1,6 +1,7 @@
 data/*.csv
 data/*.tar.gz
 data/*.zip
+temp
 
 .DS_Store
 *.pyc
