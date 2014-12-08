@@ -124,6 +124,8 @@ def runTagAffinity(numQuestions):
     # print 'Q #%d: %f %f' % (qid, recall5, recall10)
   return (sum5 / counter, sum10 / counter)
 
-(recall5, recall10) = runTagAffinity(50000)
-print ' recall@5: %f' % recall5
-print 'recall@10: %f' % recall10
+
+def test():
+  (recall5, recall10) = runTagAffinity(50000)
+  print ' recall@5: %f' % recall5
+  print 'recall@10: %f' % recall10

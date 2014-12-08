@@ -1,5 +1,5 @@
 import codecs
-import loadData
+import loadData as ld
 import json
 import tagaffinity
 
@@ -15,7 +15,6 @@ topTags = {}
 for idStr, count in tempTopTags.items():
   topTags[int(idStr)] = count
 
-
 # Get rid of these once api is established
 multiLabelD = {}
 simRankD ={}
@@ -26,6 +25,8 @@ tagTermDCache = {}
 
 
 def resetModels():
+  global tagaff_ttas
+  global tagTermDCache
   tagaff_ttas = {}
   tagTermDCache = {}
 
@@ -43,8 +44,8 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question):
     tagTermDCache[question.id] = tagTermD
 
   for t in topTags:
-    comTagCombineD[t] = (alpha * multiLabelD[t]) + (beta * simRankD[t]) +\
-                        (gamma * tagTermD[t]) + (delta * communityD[t])
+    comTagCombineD[t] = (alpha * multiLabelD.get(t, 0.0)) + (beta * simRankD.get(t, 0.0)) +\
+                        (gamma * tagTermD.get(t, 0.0)) + (delta * communityD.get(t, 0.0))
   return comTagCombineD
 
 
@@ -71,6 +72,7 @@ the corresponding parameters
 """
 def comTagCombineModelTrain(trainQuestions):
   # Tag affinity precomputation
+  global tagaff_ttas
   tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
 
 
@@ -82,14 +84,14 @@ def comTagCombineModelTest(testQuestions):
   best_recall_5_avg, best_recall_10_avg = 0.0, 0.0
   bestParams5 = [-1.0, -1.0, -1.0, -1.0]
   bestParams10 = [-1.0, -1.0, -1.0, -1.0]
-  for alpha in xrange(11):
-    alpha = alpha * 0.1
-    for beta in range(0,11):
-      beta = beta * 0.1
-      for gamma in xrange(11):
-        gamma = gamma * 0.1
-        for delta in xrange(11):
-          delta = delta * 0.1
+  for alpha in xrange(3):
+    alpha = alpha * 0.5
+    for beta in xrange(3):
+      beta = beta * 0.5
+      for gamma in xrange(3):
+        gamma = gamma * 0.5
+        for delta in xrange(3):
+          delta = delta * 0.5
 
           recall_5_sum = 0.0
           recall_10_sum = 0.0
@@ -111,15 +113,19 @@ def comTagCombineModelTest(testQuestions):
           if recall_10_avg > best_recall_10_avg:
             best_recall_10_avg = recall_10_avg
             updateParameters(alpha, beta, gamma, delta, bestParams10)
+          print '(%f, %f, %f, %f): r5 = %f, r10 = %f' % (alpha, beta, gamma, delta, recall_5_avg, recall_10_avg)
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
+ld.loadData()
+folds = ld.getCVFolds()
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
 for fold in folds:
   resetModels()
   counter += 1
+  print 'Starting Fold %d' % counter
   trainQuestions = fold[0]
   comTagCombineModelTrain(trainQuestions)
   testQuestions = fold[1]
@@ -137,7 +143,3 @@ print "recall@5 score: " + str(recall_test_scores[0]/10)
 print "recall@10 score: " + str(recall_test_scores[1]/10)
 
 posts_bodies.close()
-
-
-
-
