@@ -3,3 +3,4 @@ data/*.tar.gz
 data/*.zip
 
 .DS_Store
+*.pyc
