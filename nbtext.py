@@ -54,6 +54,7 @@ def getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs):
     i += 1
   for t in topTags:
     multinomialNaiveBayesTrain(trainQuestions, t, X, y, mnbd)
+  X = np.zeros(1)
   return mnbd
 
 """
@@ -90,7 +91,7 @@ def modelNaiveBayes(testQuestions, mnbd, topTags, wordVecs):
   recall_5_avg = recall_5_sum / numTest
   recall_10_avg = recall_10_sum / numTest
   return recall_5_avg, recall_10_avg
-
+"""
 for fold in folds:
   trainQuestions = fold[0]
   mnbd = getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
@@ -98,6 +99,6 @@ for fold in folds:
   testQuestions = fold[1]
   recall_5, recall_10 = modelNaiveBayes(testQuestions, mnbd, topTags, wordVecs)
   print recall_5
-  print recall_10
+  print recall_10"""
   
   

@@ -1,6 +1,7 @@
 import codecs
 import loadData as ld
 import json
+import nbtext
 import tagaffinity
 
 posts_body_file = 'data/posts-body.csv'
@@ -16,9 +17,11 @@ for idStr, count in tempTopTags.items():
   topTags[int(idStr)] = count
 
 # Get rid of these once api is established
-multiLabelD = {}
 simRankD ={}
 communityD = {}
+# Multinomial Naive Bayes Model:
+mnbd = {}
+multiLabelDCache = {}
 # Tag affinity model: precomputed for each fold iteration
 tagaff_ttas = {}
 tagTermDCache = {}
@@ -27,8 +30,12 @@ tagTermDCache = {}
 def resetModels():
   global tagaff_ttas
   global tagTermDCache
+  global mnbd
+  global multiLabelDCache
   tagaff_ttas = {}
   tagTermDCache = {}
+  mnbd = {}
+  multiLabelDCache = {}
 
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
@@ -36,10 +43,13 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question):
 
   # Tag Term. Stores stuff in cache so we don't have to recompute more than once per question.
   if question.id in tagTermDCache:
+    multiLabelD = multiLabelDCache[question.id]
     tagTermD = tagTermDCache[question.id]
   else:
     posts_bodies.seek(question.bodyByte)
     body = posts_bodies.readline()
+    multiLabelD = nbtext.getProbForQuestion(question.id, mnbd, topTags, wordVecs)
+    multiLabelDCache[question.id] = multiLabelD
     tagTermD = tagaffinity.getTagTermBasedRankingScores(body, tagaff_ttas, topTags)
     tagTermDCache[question.id] = tagTermD
 
@@ -73,6 +83,10 @@ the corresponding parameters
 def comTagCombineModelTrain(trainQuestions):
   # Tag affinity precomputation
   global tagaff_ttas
+  global mnbd
+  print "Begin Naive Bayes Training"
+  mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
+  print "Naive Bayes Training Complete"
   tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
 
 
@@ -117,8 +131,8 @@ def comTagCombineModelTest(testQuestions):
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
-ld.loadData()
-folds = ld.getCVFolds()
+#ld.loadData()
+#folds = ld.getCVFolds()
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
