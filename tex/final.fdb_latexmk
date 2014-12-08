@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1417993879 "final.tex" "final.pdf" "final" 1417993879
+["pdflatex"] 1417995088 "final.tex" "final.pdf" "final" 1417995092
   "/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/etexcmds.sty" 1335995445 7612 c47308d923ec19888707b0f1792b326a ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifluatex.sty" 1303254447 7324 11d14f318d865f420e692d4e6c9c18c3 ""
@@ -35,9 +35,9 @@
   "/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/kvoptions.sty" 1335995445 22417 c74ff4af6a1aa2b65d1924020edbbe11 ""
   "/usr/local/texlive/2013/texmf-dist/tex/latex/pdftex-def/pdftex.def" 1306616590 55368 3c8a0d99822330f2dfabc0dfb09ce897 ""
   "acm_proc_article-sp.cls" 1417993114 57937 eb2571a2ec7c2891244f926a8dc70d55 ""
-  "final.aux" 1417993879 594 1a3e33d473d8c69f2b2d43d7c70eac58 ""
-  "final.tex" 1417993878 1616 94ccbf2b24833c8028c46544ffc3944a ""
+  "final.aux" 1417995091 594 1a3e33d473d8c69f2b2d43d7c70eac58 ""
+  "final.tex" 1417995087 1630 f29223ed5d8984f6f9505b3147bcab0c ""
   (generated)
   "final.aux"
-  "final.log"
   "final.pdf"
+  "final.log"

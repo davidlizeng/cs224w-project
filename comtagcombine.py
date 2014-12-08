@@ -1,7 +1,13 @@
 import loadData
+import json
 
-tagsf = json.load(open('tcount-50000.txt'))
-comTagCombineD = {}
+tcount_infile = open('tcount-50000.txt', 'r')
+topTagsStrInt = json.load(tcount_infile)
+tcount_infile.close()
+
+topTagsIntInt = {}
+for idStr, count in topTagsStrInt.items():
+  topTagsIntInt[int(idStr)] = count
 
 # Get rid of these once api is established
 multiLabelD = {}
@@ -12,8 +18,7 @@ comTagCombineD = {}
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
   comTagCombineD = {}
-  for tag in tagsf:
-    t = int(tag)
+  for t in topTagsIntInt.tags:
     comTagCombineD[t] = alpha*multiLabelD[t] + beta*simRankD[t] + gamma*tagTermD[t] + delta*communityD[t]
 
 def recall_k(k, topTags, actualTags):
@@ -68,7 +73,7 @@ def comTagCombineModelTrain(trainQuestions):
           if recall_10_avg > best_recall_10_avg:
             best_recall_10_avg = recall_10_avg
             updateParameters(alpha, beta, gamma, delta, bestParams10)
-            
+
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
 """
@@ -77,7 +82,7 @@ on the input test data set. Returns the recall@5 score and the recall@10 score.
 """
 def comTagCombineModelTest(testQuestions, params5, params10):
   recall_5_sum, recall_10_sum = 0.0, 0.0
-  
+
   for question in testQuestions:
     computeComTagCombineD(params5[0], params5[1], params5[2], params5[3], question)
     sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
@@ -93,7 +98,7 @@ def comTagCombineModelTest(testQuestions, params5, params10):
     recall_10_sum += recall_10
 
   return recall_5_sum / len(testQuestions), recall_10_sum / len(testQuestions)
-  
+
 
 
 
@@ -107,8 +112,8 @@ recall_5_test, recall_10_test = comTagCombineModelTest(testQuestions, params5, p
 print "Test Values"
 print "recal@5 score: " + str(recall_5_test)
 print "recall@10 score: " + str(recall_10_test)
-          
-        
 
-      
-        
+
+
+
+
