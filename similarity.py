@@ -2,6 +2,9 @@ import math
 import numpy as np
 import random
 from collections import defaultdict
+import wordvectors
+import heapq
+import time
 
 
 def computeIdf(wordVectors):
@@ -32,15 +35,19 @@ def computeCosSim(trainTfIdf, testTfIdf):
   similarity = np.dot(trainTfIdf, testTfIdf)
   return similarity/(trainNorm * testNorm)
 
-def findSimilarPosts(trainTfIdfs, testTfIdf, num):
-  similarities = {}
-  for id, trainTfIdf in trainTfIdfs.iteritems():
-    similarities[id] = computeCosSim(trainTfIdf, testTfIdf)
-  sortedKeys = sorted(trainTfIdfs, key=lambda id : similarities[id], reverse=True)
-  topPosts = sortedKeys[0:num]
+def findSimilarPosts(trainTfIdfs, ids, testTfIdf, num):
+  heap = []
+  cosines = trainTfIdfs.dot(testTfIdf)
+  for i in xrange(len(ids)):
+    similarity = cosines[i]
+    if len(heap) < num:
+      heapq.heappush(heap, (similarity, ids[i]))
+    else:
+      heapq.heappushpop(heap, (similarity, ids[i]))
+  topPosts = [x[1] for x in heap]
   return topPosts
 
-def findSimilarTags(topPosts, num):
+def findSimilarTags(topPosts, questions):
   tagVotes = defaultdict(float)
   totalVotes = 0
   for id in topPosts:
@@ -48,43 +55,108 @@ def findSimilarTags(topPosts, num):
     for tagId in question.tags:
       tagVotes[tagId] += 1
       totalVotes += 1
-  sortedKeys = sorted(tagVotes, key=lambda id : tagVotes[id], reverse=True)
-  topTags = sortedKeys[0:num]
-  likelihoods = np.empty(num)
-  for i in xrange(num):
-    likelihoods[i] = tagVotes[topTags[i]] * 1.0 / totalVotes
-  return topTags, likelihoods
+  for id in tagVotes:
+    tagVotes[id] /= totalVotes
+  return tagVotes
 
-def recall_k(k, topTags, actualTags):
+def recall_k(k, sortedTags, result, actualTags):
   recall_score = 0.0
   for i in xrange(k):
-    if topTags[i] in actualTags:
+    if result[sortedTags[i]] > 0 and sortedTags[i] in actualTags:
       recall_score += 1.0
   return recall_score / len(actualTags)
 
-def similarityModel(trainVectors, testVectors, numPosts, numTags):
-  print "computing idf"
+
+# sim_data = None
+
+
+# def initSimModel():
+#   global sim_data
+#   if sim_data == None:
+#     sim_data = {}
+#     print "no sim data detected. generating/caching word vectors"
+#     words, wordToIndex = wordvectors.getFrequentWords(questions)
+#     wordVecs = wordvectors.getWordVectors(questions, wordToIndex)
+#     sim_data['wordToIndex'] = wordToIndex
+#     sim_data['wordVecs'] = wordVecs
+
+
+def similarityModel(questions, wordVecs):
+  trainVectors = {}
+  for id in questions:
+    trainVectors[id] = wordVecs[id]
+  # print "computing idf"
   idf = computeIdf(trainVectors)
-  print "idf done"
-  print "computing tfidfs"
+  # print "idf done"
+  # print "computing tfidfs"
   tfidfs = computeTfIdfs(trainVectors, idf)
-  print "tfidfs done"
-  numTest = len(testVectors)
-  recall_5_sum = 0.0
-  recall_10_sum = 0.0
-  for id, testVector in testVectors.iteritems():
-    testTfIdf = computeTfIdf(testVector, idf)
-    topPosts = findSimilarPosts(tfidfs, testTfIdf, numPosts)
-    topTags, likelihoods = findSimilarTags(topPosts, numTags)
-    recall_5 = recall_k(5, topTags, questions[id].tags)
-    recall_10 = recall_k(10, topTags, questions[id].tags)
-    recall_5_sum += recall_5
-    recall_10_sum += recall_10
-    print recall_5, recall_10
-
-  return recall_5_sum/numTest, recall_10_sum/numTest
+  tfidf_matrix = np.zeros((len(tfidfs), len(tfidfs.itervalues().next())), dtype='float64')
+  ids = tfidfs.keys()
+  for i in xrange(len(ids)):
+    norm = np.linalg.norm(tfidfs[ids[i]])
+    if norm != 0:
+      tfidf_matrix[i] = tfidfs[ids[i]] / norm
+  # print "tfidfs done"
+  return (tfidf_matrix, ids, idf)
 
 
+def getSimilarityRankingScores(questionId, questions, wordVecs, sim_model, tagCounts):
+  numPosts = 5
+  # postWords = wordvectors.getWordsFromPost(questionBody)
+  tfidfs = sim_model[0]
+  ids = sim_model[1]
+  idf = sim_model[2]
+
+  # testVector = wordvectors.getWordVector(postWords, wordToIndex)
+  testVector = wordVecs[questionId]
+  testTfIdf = computeTfIdf(testVector, idf)
+  norm = np.linalg.norm(testTfIdf)
+
+  if norm != 0:
+    testTfIdf /= norm
+
+  # print "test tfidf finished"
+  topPosts = findSimilarPosts(tfidfs, ids, testTfIdf, numPosts)
+  # print "top posts found"
+  likelihoods = findSimilarTags(topPosts, questions)
+  # print "likelihoods found"
+
+  result = {}
+  l_values = likelihoods.values()
+  min_val = min(l_values)
+  range_val = max(l_values) - min_val
+  for tagId in tagCounts.keys():
+    if tagId in likelihoods and range_val > 0:
+      result[tagId] = (likelihoods[tagId] - min_val)/range_val
+    else:
+      result[tagId] = 0.0
+  return result
+
+
+def run():
+  folds = getCVFolds()
+  train = folds[0][0]
+  test = folds[0][1]
+  t0 = time.time()
+  sim_model = similarityModel(train)
+  t1 = time.time()
+  print "train complete", t1 - t0
+  t2 = time.time()
+  recall5_sum = 0
+  recall10_sum = 0
+  count = 0
+  for qid in test:
+    result = getSimilarityRankingScores(qid, sim_model, topTags)
+    sortedTags = sorted(result, key = result.get, reverse = True)
+    recall5 = recall_k(5, sortedTags, result, questions[qid].tags)
+    recall10 = recall_k(10, sortedTags, result, questions[qid].tags)
+    recall5_sum += recall5
+    recall10_sum += recall10
+    print qid, recall5, recall10, count
+    count += 1
+  t3 = time.time()
+  print "test complete", t3 - t2
+  print "MEAN: ",  recall5_sum/5000.0, recall10_sum/5000.0
 
 # trainVecs = {}
 # testVecs = {}

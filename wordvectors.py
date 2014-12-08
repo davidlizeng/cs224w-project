@@ -45,6 +45,13 @@ def countFrequentWords(freqs):
       index += 1
   return (words, wordToIndex)
 
+def getWordVector(words, wordToIndex):
+  vector = np.zeros(len(wordToIndex))
+  for w in words:
+    if w in wordToIndex:
+      vector[wordToIndex[w]] += 1
+  return vector
+
 def getWordVectors(questions, wordToIndex):
   infile = codecs.open(posts_body_file, 'r', 'utf-8')
   wordVecs = {}
@@ -52,10 +59,7 @@ def getWordVectors(questions, wordToIndex):
     infile.seek(question.bodyByte)
     body = infile.readline()
     postWords = getWordsFromPost(body)
-    vector = np.zeros(len(wordToIndex))
-    for w in postWords:
-      if w in wordToIndex:
-        vector[wordToIndex[w]] += 1
+    vector = getWordVector(postWords, wordToIndex)
     wordVecs[id] = vector
   infile.close()
   return wordVecs

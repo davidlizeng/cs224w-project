@@ -69,7 +69,7 @@ def getProbForQuestion(qid, mnbd, topTags, wordVecs):
     tagProb = clf.predict_proba(X)
     questionNBD[tag] = tagProb[0][1]
   normalizeProb(questionNBD)
-  return questionNBD  
+  return questionNBD
 
 def modelNaiveBayes(testQuestions, mnbd, topTags, wordVecs):
   numTest = len(testQuestions)
@@ -100,5 +100,5 @@ for fold in folds:
   recall_5, recall_10 = modelNaiveBayes(testQuestions, mnbd, topTags, wordVecs)
   print recall_5
   print recall_10"""
-  
-  
+
+

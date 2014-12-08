@@ -3,6 +3,7 @@ import loadData as ld
 import json
 import nbtext
 import tagaffinity
+import similarity
 
 posts_body_file = 'data/posts-body.csv'
 posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
@@ -13,11 +14,10 @@ tcount_infile = open('tcount-50000.txt', 'r')
 tempTopTags = json.load(tcount_infile)
 tcount_infile.close()
 topTags = {}
-for idStr, count in tempTopTags.items():
+for idStr, count in tempTopTags.iteritems():
   topTags[int(idStr)] = count
 
 # Get rid of these once api is established
-simRankD ={}
 communityD = {}
 # Multinomial Naive Bayes Model:
 mnbd = {}
@@ -25,6 +25,9 @@ multiLabelDCache = {}
 # Tag affinity model: precomputed for each fold iteration
 tagaff_ttas = {}
 tagTermDCache = {}
+# Similarity model: precomputed for each fold iteration
+sim_model = {}
+similarityDCache = {}
 
 
 def resetModels():
@@ -32,10 +35,14 @@ def resetModels():
   global tagTermDCache
   global mnbd
   global multiLabelDCache
+  global sim_model
+  global similarityDCache
   tagaff_ttas = {}
   tagTermDCache = {}
   mnbd = {}
   multiLabelDCache = {}
+  sim_model = {}
+  similarityDCache = {}
 
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
@@ -45,6 +52,7 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question):
   if question.id in tagTermDCache:
     multiLabelD = multiLabelDCache[question.id]
     tagTermD = tagTermDCache[question.id]
+    similarityD = similarityDCache[question.id]
   else:
     posts_bodies.seek(question.bodyByte)
     body = posts_bodies.readline()
@@ -52,9 +60,11 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question):
     multiLabelDCache[question.id] = multiLabelD
     tagTermD = tagaffinity.getTagTermBasedRankingScores(body, tagaff_ttas, topTags)
     tagTermDCache[question.id] = tagTermD
+    similarityD = similarity.getSimilarityRankingScores(question.id, questions, wordVecs, sim_model, topTags)
+    similarityDCache[question.id] = similarityD
 
   for t in topTags:
-    comTagCombineD[t] = (alpha * multiLabelD.get(t, 0.0)) + (beta * simRankD.get(t, 0.0)) +\
+    comTagCombineD[t] = (alpha * multiLabelD.get(t, 0.0)) + (beta * similarityD.get(t, 0.0)) +\
                         (gamma * tagTermD.get(t, 0.0)) + (delta * communityD.get(t, 0.0))
   return comTagCombineD
 
@@ -84,10 +94,15 @@ def comTagCombineModelTrain(trainQuestions):
   # Tag affinity precomputation
   global tagaff_ttas
   global mnbd
+  global sim_model
   print "Begin Naive Bayes Training"
   mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
   print "Naive Bayes Training Complete"
+  print "Begin Tag Affinity Training"
   tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
+  print "Tag Affinity Training Complete"
+  sim_model = similarity.similarityModel(trainQuestions, wordVecs)
+  print "Similarity Training Complete"
 
 
 """
@@ -131,8 +146,8 @@ def comTagCombineModelTest(testQuestions):
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
-#ld.loadData()
-#folds = ld.getCVFolds()
+# ld.loadData()
+# folds = ld.getCVFolds()
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
@@ -141,6 +156,7 @@ for fold in folds:
   counter += 1
   print 'Starting Fold %d' % counter
   trainQuestions = fold[0]
+  print 'Fold size %d' % len(fold[0])
   comTagCombineModelTrain(trainQuestions)
   testQuestions = fold[1]
   params5, score5, params10, score10 = comTagCombineModelTest(testQuestions)
