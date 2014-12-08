@@ -99,19 +99,33 @@ def comTagCombineModelTest(testQuestions, params5, params10):
 
   return recall_5_sum / len(testQuestions), recall_10_sum / len(testQuestions)
 
-
-
-
-bestVals5, best_recall_5, bestVals10, best_recall_10 = comTagCombineModel(trainQuestions)
-print "Training Values:"
-print "recall@5 params: " + str(bestVals5)
-print "recall@5 score: " + str(best_recall_5)
-print "recall@10 params: " + str(bestVals10)
-print "recall@10 score: " + str(best_recall_10)
-recall_5_test, recall_10_test = comTagCombineModelTest(testQuestions, params5, params10)
-print "Test Values"
-print "recal@5 score: " + str(recall_5_test)
-print "recall@10 score: " + str(recall_10_test)
+recall_train_scores = [0,0]
+recall_test_scores = [0,0]
+for fold in folds:
+  trainQuestions = fold[0]
+  bestVals5, best_recall_5, bestVals10, best_recall_10 = comTagCombineModel(trainQuestions)
+  print "Training Values:"
+  print "recall@5 params: " + str(bestVals5)
+  print "recall@5 score: " + str(best_recall_5)
+  print "recall@10 params: " + str(bestVals10)
+  print "recall@10 score: " + str(best_recall_10)
+  recall_train_scores[0] += best_recall_5
+  recall_train_scores[1] += best_recall_10
+  
+  testQuestions = fold[1]
+  recall_5_test, recall_10_test = comTagCombineModelTest(testQuestions, params5, params10)
+  print "Test Values"
+  print "recal@5 score: " + str(recall_5_test)
+  print "recall@10 score: " + str(recall_10_test)
+  recall_test_scores[0] += recall_5_test
+  recall_test_scores[1] += recall_10_test
+print "Average Train Scores:"
+print "recall@5 score: " + str(recall_train_scores[0]/10)
+print "recall@10 score: " + str(recall_train_scores[1]/10)
+print "Average Test Scores:"
+print "recall@5 score: " + str(recall_test_scores[0]/10)
+print "recall@10 score: " + str(recall_test_scores[1]/10)
+  
 
 
 
