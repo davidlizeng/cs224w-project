@@ -1,5 +1,6 @@
 import loadData
 
+tagsf = json.load(open('tcount-50000.txt'))
 comTagCombineD = {}
 
 # Get rid of these once api is established
@@ -11,7 +12,8 @@ comTagCombineD = {}
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
   comTagCombineD = {}
-  for t in loadData.tags:
+  for tag in tagsf:
+    t = int(tag)
     comTagCombineD[t] = alpha*multiLabelD[t] + beta*simRankD[t] + gamma*tagTermD[t] + delta*communityD[t]
 
 def recall_k(k, topTags, actualTags):
