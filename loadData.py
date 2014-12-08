@@ -1,4 +1,5 @@
 import codecs
+import numpy as np
 
 comments_meta_file = 'data/comments-meta-marked.csv'
 comments_text_file = 'data/comments-text.csv'
@@ -228,6 +229,29 @@ def loadData():
   loadUsers()
   loadTags()
   loadQuestions(50000, True)
-  loadAnswers()
-  loadComments()
+  # loadAnswers()
+  # loadComments()
+
+def getCVFolds():
+  folds = []
+  k = 10
+  num_questions = len(questions)
+  fold_size = num_questions/k
+  ids = questions.keys()
+  np.random.seed(0)
+  np.random.shuffle(ids)
+  for i in xrange(k):
+    folds.append(({}, {}))
+    for j in xrange(num_questions):
+      if j >= i * fold_size and j < (i + 1) * fold_size:
+        folds[i][1][ids[j]] = questions[ids[j]]
+      else:
+        folds[i][0][ids[j]] = questions[ids[j]]
+  return folds
+
+
+
+
+
+
 
