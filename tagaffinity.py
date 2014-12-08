@@ -18,6 +18,7 @@ posts_body_file = 'data/posts-body.csv'
 #    If exists, then get score. Otherwise 0.
 # Returns tagCounts as well. Map from tagID : # posts it appeared. Only if >= 50
 def getTagTermAffinityScores(questions, includeCounts=True):
+  print 'Computing TagAffinity model on %d questions' % len(questions)
   frequentWords = set(wordvectors.getFrequentWords(questions)[0])
   ttas = {}
   tagCounts = {}
@@ -40,6 +41,7 @@ def getTagTermAffinityScores(questions, includeCounts=True):
     for (tagID, freq) in inner_dict.items():
       inner_dict[tagID] = float(freq) / tagCounts[tagID]
 
+  print 'Finished TagAffinity model'
   if includeCounts:
     finalTagCounts = {}
     for (tagID, count) in tagCounts.items():
@@ -98,18 +100,19 @@ def runTagAffinity(numQuestions):
   ld.loadUsers()
   ld.loadTags()
   ld.loadQuestions(numQuestions, True)
-  # (ttas, finalTagCounts) = getTagTermAffinityScores(questions)
-  ttas_file = codecs.open('ttas-50000.txt', 'r', 'utf-8')
-  tc_file = codecs.open('tcount-50000.txt', 'r', 'utf-8')
-  ttas = json.load(ttas_file)
-  finalTagCounts = json.load(tc_file)
-  ttas_file.close()
-  tc_file.close()
+  folds = ld.getCVFolds()
+  (ttas, finalTagCounts) = getTagTermAffinityScores(folds[0][0])
+  # ttas_file = codecs.open('ttas-50000.txt', 'r', 'utf-8')
+  # tc_file = codecs.open('tcount-50000.txt', 'r', 'utf-8')
+  # ttas = json.load(ttas_file)
+  # finalTagCounts = json.load(tc_file)
+  # ttas_file.close()
+  # tc_file.close()
 
   posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
   (sum5, sum10) = (0.0, 0.0)
   counter = 0
-  for qid, q in ld.questions.items():
+  for qid, q in folds[0][1].items():
     posts_bodies.seek(q.bodyByte)
     body = posts_bodies.readline()
     (recall5, recall10) = getRecallScores(body, q.tags, ttas, finalTagCounts)
@@ -119,8 +122,8 @@ def runTagAffinity(numQuestions):
     if counter % 100 == 0:
       print 'Done %d' % counter
     # print 'Q #%d: %f %f' % (qid, recall5, recall10)
-  return (sum5 / numQuestions, sum10 / numQuestions)
+  return (sum5 / counter, sum10 / counter)
 
-(recall5, recall10) = runTagAffinity(5)
+(recall5, recall10) = runTagAffinity(50000)
 print ' recall@5: %f' % recall5
 print 'recall@10: %f' % recall10
