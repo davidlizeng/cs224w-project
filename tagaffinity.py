@@ -17,7 +17,7 @@ posts_body_file = 'data/posts-body.csv'
 #    Look up tagID in dict.
 #    If exists, then get score. Otherwise 0.
 # Returns tagCounts as well. Map from tagID : # posts it appeared. Only if >= 50
-def getTagTermAffinityScores(questions):
+def getTagTermAffinityScores(questions, includeCounts=True):
   frequentWords = set(wordvectors.getFrequentWords(questions)[0])
   ttas = {}
   tagCounts = {}
@@ -40,12 +40,14 @@ def getTagTermAffinityScores(questions):
     for (tagID, freq) in inner_dict.items():
       inner_dict[tagID] = float(freq) / tagCounts[tagID]
 
-  finalTagCounts = {}
-  for (tagID, count) in tagCounts.items():
-    if count >= 50:
-      finalTagCounts[tagID] = count
-
-  return (ttas, finalTagCounts)
+  if includeCounts:
+    finalTagCounts = {}
+    for (tagID, count) in tagCounts.items():
+      if count >= 50:
+        finalTagCounts[tagID] = count
+    return (ttas, finalTagCounts)
+  else:
+    return ttas
 
 # Utility function
 # Given question body and ttas, tagCounts from getTagTermAffinityScores,

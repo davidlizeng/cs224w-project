@@ -1,25 +1,47 @@
+import codecs
 import loadData
 import json
+import tagaffinity
 
+posts_body_file = 'data/posts-body.csv'
+posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
+
+# Get top tags. Diction of <int, int>: tagID to count in first 50,000 questions
+# Only includes tags which appeared more than 50 times.
 tcount_infile = open('tcount-50000.txt', 'r')
-topTagsStrInt = json.load(tcount_infile)
+tempTopTags = json.load(tcount_infile)
 tcount_infile.close()
+topTags = {}
+for idStr, count in tempTopTags.items():
+  topTags[int(idStr)] = count
 
-topTagsIntInt = {}
-for idStr, count in topTagsStrInt.items():
-  topTagsIntInt[int(idStr)] = count
 
 # Get rid of these once api is established
 multiLabelD = {}
 simRankD ={}
-tagTermD = {}
 communityD = {}
-comTagCombineD = {}
+# Tag affinity model: precomputed for each fold iteration
+tagaff_ttas = {}
+tagTermDCache = {}
+
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question):
   comTagCombineD = {}
-  for t in topTagsIntInt.tags:
-    comTagCombineD[t] = alpha*multiLabelD[t] + beta*simRankD[t] + gamma*tagTermD[t] + delta*communityD[t]
+
+  # Tag Term. Stores stuff in cache so we don't have to recompute more than once per question.
+  if question.id in tagTermDCache:
+    tagTermD = tagTermDCache[question.id]
+  else:
+    posts_bodies.seek(question.bodyByte)
+    body = posts_bodies.readline()
+    tagTermD = tagaffinity.getTagTermBasedRankingScores(body, tagaff_ttas, topTags)
+    tagTermDCache[question.id] = tagTermD
+
+  for t in topTags:
+    comTagCombineD[t] = (alpha * multiLabelD[t]) + (beta * simRankD[t]) +\
+                        (gamma * tagTermD[t]) + (delta * communityD[t])
+  return comTagCombineD
+
 
 def recall_k(k, topTags, actualTags):
   recall_score = 0.0
@@ -29,11 +51,13 @@ def recall_k(k, topTags, actualTags):
       recall_score += 1.0
   return recall_score / len(actualTags)
 
+
 def updateParameters(alpha, beta, gamma, delta, bestParams):
   bestParams[0] = alpha
   bestParams[1] = beta
   bestParams[2] = gamma
   bestParams[3] = delta
+
 
 """
 Takes in a training set of questions and trains alpha, beta, gamma, delta for
@@ -41,9 +65,18 @@ recall@5 and recall@10. Returns the best params for recall@5 and recall@10 and
 the corresponding parameters
 """
 def comTagCombineModelTrain(trainQuestions):
+  # Tag affinity precomputation
+  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
+
+
+"""
+Evaluates the recall@5 and recall@10 scores using the input parameters for each
+on the input test data set. Returns the recall@5 score and the recall@10 score.
+"""
+def comTagCombineModelTest(testQuestions):
   best_recall_5_avg, best_recall_10_avg = 0.0, 0.0
-  bestParams5 = [-1, -1, -1, -1]
-  bestParams10 = [-1, -1, -1, -1]
+  bestParams5 = [-1.0, -1.0, -1.0, -1.0]
+  bestParams10 = [-1.0, -1.0, -1.0, -1.0]
   for alpha in xrange(11):
     alpha = alpha * 0.1
     for beta in range(0,11):
@@ -55,8 +88,8 @@ def comTagCombineModelTrain(trainQuestions):
 
           recall_5_sum = 0.0
           recall_10_sum = 0.0
-          for question in trainQuestions:
-            computeComTagCombineD(alpha, beta, gamma, delta, question)
+          for (qid, question) in testQuestions.items():
+            comTagCombineD = computeComTagCombineD(alpha, beta, gamma, delta, question)
             sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
             num = min(10, len(sortedTags))
             topTags = sortedTags[0:num]
@@ -65,8 +98,8 @@ def comTagCombineModelTrain(trainQuestions):
             recall_5_sum += recall_5
             recall_10_sum += recall_10
 
-          recall_5_avg = recall_5_sum / len(trainQuestions)
-          recall_10_avg = recall_10_sum / len(trainQuestions)
+          recall_5_avg = recall_5_sum / len(testQuestions)
+          recall_10_avg = recall_10_sum / len(testQuestions)
           if recall_5_avg > best_recall_5_avg:
             best_recall_5_avg = recall_5_avg
             updateParameters(alpha, beta, gamma, delta, bestParams5)
@@ -76,57 +109,28 @@ def comTagCombineModelTrain(trainQuestions):
 
   return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
 
-"""
-Evaluates the recall@5 and recall@10 scores using the input parameters for each
-on the input test data set. Returns the recall@5 score and the recall@10 score.
-"""
-def comTagCombineModelTest(testQuestions, params5, params10):
-  recall_5_sum, recall_10_sum = 0.0, 0.0
 
-  for question in testQuestions:
-    computeComTagCombineD(params5[0], params5[1], params5[2], params5[3], question)
-    sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
-    num = min(5, len(sortedTags))
-    recall_5 = recall_k(5, topTags, question.tags)
-    recall_5_sum += recall_5
-
-  for question in testQuestions:
-    computeComTagCombineD(params10[0], params10[1], params10[2], params10[3], question)
-    sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
-    num = min(10, len(sortedTags))
-    recall_10 = recall_k(10, topTags, question.tags)
-    recall_10_sum += recall_10
-
-  return recall_5_sum / len(testQuestions), recall_10_sum / len(testQuestions)
-
-recall_train_scores = [0,0]
-recall_test_scores = [0,0]
+counter = 0
+recall_test_scores = [0.0, 0.0]
 for fold in folds:
+  counter += 1
   trainQuestions = fold[0]
-  bestVals5, best_recall_5, bestVals10, best_recall_10 = comTagCombineModel(trainQuestions)
-  print "Training Values:"
-  print "recall@5 params: " + str(bestVals5)
-  print "recall@5 score: " + str(best_recall_5)
-  print "recall@10 params: " + str(bestVals10)
-  print "recall@10 score: " + str(best_recall_10)
-  recall_train_scores[0] += best_recall_5
-  recall_train_scores[1] += best_recall_10
-  
+  comTagCombineModelTrain(trainQuestions)
   testQuestions = fold[1]
-  recall_5_test, recall_10_test = comTagCombineModelTest(testQuestions, params5, params10)
-  print "Test Values"
-  print "recal@5 score: " + str(recall_5_test)
-  print "recall@10 score: " + str(recall_10_test)
-  recall_test_scores[0] += recall_5_test
-  recall_test_scores[1] += recall_10_test
-print "Average Train Scores:"
-print "recall@5 score: " + str(recall_train_scores[0]/10)
-print "recall@10 score: " + str(recall_train_scores[1]/10)
+  params5, score5, params10, score10 = comTagCombineModelTest(testQuestions)
+  print "Test Values for Run #%d:" % counter
+  print "recall@5 params: " + str(params5)
+  print "recall@5 score: " + str(score5)
+  print "recall@10 params: " + str(params10)
+  print "recall@10 score: " + str(score10)
+  recall_test_scores[0] += score5
+  recall_test_scores[1] += score10
+
 print "Average Test Scores:"
 print "recall@5 score: " + str(recall_test_scores[0]/10)
 print "recall@10 score: " + str(recall_test_scores[1]/10)
-  
 
+posts_bodies.close()
 
 
 
