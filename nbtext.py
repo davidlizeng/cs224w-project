@@ -5,29 +5,10 @@ from sklearn.naive_bayes import MultinomialNB as mnb
 import loadData
 import wordvectors
 
-def multinomialBayesTest(numQuestions, clf, X, y):
-  falseNegatives = 0
-  totalNegatives = 0
-  falsePositives = 0
-  totalPositives = 0
-  for i in range(0,numQuestions):
-    if y[i] == 1:
-      totalPositives += 1
-      if clf.predict(X[i]) != 1:
-        falseNegatives += 1
-    if y[i] == 0:
-      totalNegatives += 1
-      if clf.predict(X[i]) != 0:
-        falsePositives += 1
-  print "False Negatives: " + str(falseNegatives) + ", " + str(totalPositives) + ", " + str((falseNegatives*1.0) / max(1,totalPositives))
-  print "False Positives: " + str(falsePositives) + ", " + str(totalNegatives) + ", " + str((falsePositives*1.0) / max(1,totalNegatives))
-
 def recallTest(numQuestions, clf, k):
   recallSum = 0
   for i in range(0, numQuestions):
-    tagProb = clf.predict_proba(X[i])
-    
-    
+    tagProb = clf.predict_proba(X[i])   
 
 def multinomialNaiveBayesTrain(numQuestions, tag, X, y):
   clf = mnb()
@@ -50,14 +31,6 @@ def multinomialNaiveBayesTrain(numQuestions, tag, X, y):
     sortedProbs.pop()
     recallProbs[qid] = sortedProbs
     i += 1
-  clf.predict_proba(X)
-  #multinomialBayesTest(numQuestions, clf, X, y)
-
-
-tagCountDict = {}
-for tag in loadData.tags:
-  tagCountDict[tag] = loadData.tags[tag].count
-sortedTags = sorted(tagCountDict.items(), key=operator.itemgetter(1), reverse=True)
 
 y = np.zeros(loadData.NUM_QUESTIONS)
 X = np.zeros((loadData.NUM_QUESTIONS,len(wordToIndex)))
