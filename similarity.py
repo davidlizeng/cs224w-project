@@ -101,7 +101,7 @@ def similarityModel(questions, wordVecs):
 
 
 def getSimilarityRankingScores(questionId, questions, wordVecs, sim_model, tagCounts):
-  numPosts = 5
+  numPosts = 50
   # postWords = wordvectors.getWordsFromPost(questionBody)
   tfidfs = sim_model[0]
   ids = sim_model[1]
