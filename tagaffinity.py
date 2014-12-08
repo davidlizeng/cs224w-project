@@ -63,8 +63,18 @@ def getTagTermBasedRankingScores(questionBody, ttas, tagCounts):
       inner_dict = ttas[word]
       for (tagID, score) in result.items():
         result[tagID] *= (1 - inner_dict.get(tagID, 0))
+
+  maxScore = 0.0
+  minScore = 0.0
   for (tagID, score) in result.items():
     result[tagID] = 1 - score
+    maxScore = max(maxScore, 1 - score)
+    minScore = min(minScore, 1 - score)
+  scoreRange = maxScore - minScore
+  if scoreRange == 0.0:
+    scoreRange = 1
+  for (tagID, score) in result.items():
+    result[tagID] = (score - minScore) / scoreRange
   return result
 
 # Calculates recall@k score
@@ -83,11 +93,11 @@ def getRecallScores(questionBody, correctTags, ttas, tagCounts):
   recall10 = recall_K(10, s_ttbrs, correctTags)
   return (recall5, recall10)
 
-# Returns recall@5 and recall@10 scores for numTest
-def runTagAffinity(numTrain, numTest):
+# Returns recall@5 and recall@10 scores for numQuestions
+def runTagAffinity(numQuestions):
   ld.loadUsers()
   ld.loadTags()
-  ld.loadQuestions(numTrain, True, numTest)
+  ld.loadQuestions(numQuestions, True)
   # (ttas, finalTagCounts) = getTagTermAffinityScores(questions)
   ttas_file = codecs.open('ttas-50000.txt', 'r', 'utf-8')
   tc_file = codecs.open('tcount-50000.txt', 'r', 'utf-8')
@@ -98,9 +108,8 @@ def runTagAffinity(numTrain, numTest):
 
   posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
   (sum5, sum10) = (0.0, 0.0)
-  numTest = len(ld.questions)
   counter = 0
-  for qid, q in ld.questions_test.items():
+  for qid, q in ld.questions.items():
     posts_bodies.seek(q.bodyByte)
     body = posts_bodies.readline()
     (recall5, recall10) = getRecallScores(body, q.tags, ttas, finalTagCounts)
@@ -110,8 +119,8 @@ def runTagAffinity(numTrain, numTest):
     if counter % 100 == 0:
       print 'Done %d' % counter
     # print 'Q #%d: %f %f' % (qid, recall5, recall10)
-  return (sum5 / numTest, sum10 / numTest)
+  return (sum5 / numQuestions, sum10 / numQuestions)
 
-(recall5, recall10) = runTagAffinity(50000, 10000)
+(recall5, recall10) = runTagAffinity(5)
 print ' recall@5: %f' % recall5
 print 'recall@10: %f' % recall10
