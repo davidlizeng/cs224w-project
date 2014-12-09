@@ -218,7 +218,7 @@ wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
-for fold in folds:
+for fold in folds[0:5]:
   resetModels()
   counter += 1
   print 'Starting Fold %d' % counter
