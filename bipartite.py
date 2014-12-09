@@ -50,8 +50,8 @@ def outputGraph(g):
   outfile.write(json.dumps(g, separators=(',',':')))
   outfile.close()
 
-def getBipartiteGraph():
-  infile = open(output_file, 'r')
+def getBipartiteGraph(filename = output_file):
+  infile = open(filename, 'r')
   g_temp = json.load(infile)
   infile.close()
   g = {}
