@@ -5,6 +5,7 @@ from collections import defaultdict
 import wordvectors
 import heapq
 import time
+import snap
 
 
 def computeIdf(wordVectors):
@@ -67,19 +68,6 @@ def recall_k(k, sortedTags, result, actualTags):
   return recall_score / len(actualTags)
 
 
-# sim_data = None
-
-
-# def initSimModel():
-#   global sim_data
-#   if sim_data == None:
-#     sim_data = {}
-#     print "no sim data detected. generating/caching word vectors"
-#     words, wordToIndex = wordvectors.getFrequentWords(questions)
-#     wordVecs = wordvectors.getWordVectors(questions, wordToIndex)
-#     sim_data['wordToIndex'] = wordToIndex
-#     sim_data['wordVecs'] = wordVecs
-
 
 def similarityModel(questions, wordVecs):
   trainVectors = {}
@@ -98,6 +86,35 @@ def similarityModel(questions, wordVecs):
       tfidf_matrix[i] = tfidfs[ids[i]] / norm
   # print "tfidfs done"
   return (tfidf_matrix, ids, idf)
+
+
+def buildSimGraph(questions, wordVecs):
+  tfidf_matrix, ids, idf = similarityModel(questions, wordVecs)
+  graph = snap.TUNGraph.New()
+  for id in ids:
+    graph.AddNode(id)
+  print graph.GetNodes()
+  numq = tfidf_matrix.shape[0]
+  for i in xrange(numq):
+    if i %1000 == 0:
+      print "done", i
+    similarity = tfidf_matrix[i+1:].dot(tfidf_matrix[i])
+    for j in xrange(len(similarity)):
+      if similarity[j] > 0.3:
+        graph.AddEdge(ids[i], ids[j+i+1])
+  fout = snap.TFOut("similarity.graph")
+  graph.Save(fout)
+  fout.Flush()
+
+
+def getSimilarityModel(questions, wordVecs, graph):
+  tfidf_matrix, ids, idf = similarityModel(questions, wordVecs)
+  nidv = snap.TIntV()
+  for id in ids:
+    nidv.Add(i)
+  subgraph = graph.GetSubGraph(graph, nidv)
+  communities = snap.TCnComV()
+  modularity = snap.CommunityCNM(subgraph, communities)
 
 
 def getSimilarityRankingScores(questionId, questions, wordVecs, sim_model, tagCounts):
@@ -138,7 +155,7 @@ def run():
   train = folds[0][0]
   test = folds[0][1]
   t0 = time.time()
-  sim_model = similarityModel(train)
+  sim_model = similarityModel(train, wordVecs)
   t1 = time.time()
   print "train complete", t1 - t0
   t2 = time.time()
@@ -146,7 +163,7 @@ def run():
   recall10_sum = 0
   count = 0
   for qid in test:
-    result = getSimilarityRankingScores(qid, sim_model, topTags)
+    result = getSimilarityRankingScores(qid, questions, wordVecs, sim_model, topTags)
     sortedTags = sorted(result, key = result.get, reverse = True)
     recall5 = recall_k(5, sortedTags, result, questions[qid].tags)
     recall10 = recall_k(10, sortedTags, result, questions[qid].tags)

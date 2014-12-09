@@ -229,8 +229,8 @@ def loadData():
   loadUsers()
   loadTags()
   loadQuestions(50000, True)
-  # loadAnswers()
-  # loadComments()
+  loadAnswers()
+  loadComments()
 
 def getCVFolds():
   folds = []

@@ -120,7 +120,7 @@ def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
       beta = beta * 0.2
       for gamma in xrange(6):
         gamma = gamma * 0.2
-        for delta in xrange(6):
+        for delta in xrange(1):
           delta = delta * 0.2
 
           recall_5_sum = 0.0
@@ -158,7 +158,7 @@ wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
-for fold in folds:
+for fold in folds[0:5]:
   resetModels()
   counter += 1
   print 'Starting Fold %d' % counter
