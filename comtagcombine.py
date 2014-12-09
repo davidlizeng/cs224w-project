@@ -5,6 +5,7 @@ import nbtext
 import tagaffinity
 import similarity
 import wordvectors
+import usergraph
 
 posts_body_file = 'data/posts-body.csv'
 posts_bodies = codecs.open(posts_body_file, 'r', 'utf-8')
@@ -23,17 +24,21 @@ questionTagsSyn = {}
 # Dict of question ID (int) to size (int) of question tag list only including popular tags
 questionTagsPopOnly = {}
 
-# Get rid of these once api is established
-communityD = {}
 # Multinomial Naive Bayes Model:
 mnbd = {}
 multiLabelDCache = {}
+multiLabelD = {}
 # Tag affinity model: precomputed for each fold iteration
 tagaff_ttas = {}
 tagTermDCache = {}
+tagTermD = {}
 # Similarity model: precomputed for each fold iteration
 sim_model = {}
 similarityDCache = {}
+similarityD = {}
+# Community model: based on user to tag network
+usertagnetwork = {}
+communityDCache = {}
 
 
 def setQuestionModelModifications(allQuestions):
@@ -72,12 +77,16 @@ def resetModels():
   global multiLabelDCache
   global sim_model
   global similarityDCache
+  global usertagnetwork
+  global communityDCache
   tagaff_ttas = {}
   tagTermDCache = {}
   mnbd = {}
   multiLabelDCache = {}
   sim_model = {}
   similarityDCache = {}
+  usertagnetwork = {}
+  communityDCache = {}
 
 
 def computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions):
@@ -88,6 +97,7 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions):
     multiLabelD = multiLabelDCache[question.id]
     tagTermD = tagTermDCache[question.id]
     similarityD = similarityDCache[question.id]
+    communityD = communityDCache[question.id]
   else:
     posts_bodies.seek(question.bodyByte)
     body = posts_bodies.readline()
@@ -97,6 +107,8 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions):
     tagTermDCache[question.id] = tagTermD
     similarityD = similarity.getSimilarityRankingScores(question.id, trainQuestions, wordVecs, sim_model, topTags)
     similarityDCache[question.id] = similarityD
+    communityD = usergraph.getTagPredictions(question.id, question, usertagnetwork, topTags)
+    communityDCache[question.id] = communityD
 
   for t in topTags:
     comTagCombineD[t] = (alpha * multiLabelD.get(t, 0.0)) + (beta * similarityD.get(t, 0.0)) +\
@@ -135,6 +147,7 @@ def comTagCombineModelTrain(trainQuestions):
   global tagaff_ttas
   global mnbd
   global sim_model
+  global usertagnetwork
   print "Begin Naive Bayes Training"
   mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
   print "Naive Bayes Training Complete"
@@ -143,6 +156,8 @@ def comTagCombineModelTrain(trainQuestions):
   print "Tag Affinity Training Complete"
   sim_model = similarity.similarityModel(trainQuestions, wordVecs)
   print "Similarity Training Complete"
+  usertagnetwork = usergraph.createUserGraph(trainQuestions)
+  print "Community Training Complete"
 
 
 """
@@ -159,7 +174,7 @@ def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
       beta = beta * 0.2
       for gamma in xrange(6):
         gamma = gamma * 0.2
-        for delta in xrange(1):   ## CHANGE THIS LATER
+        for delta in xrange(6):
           delta = delta * 0.2
 
           (r5_sum, r5pop_sum) = (0.0, 0.0)

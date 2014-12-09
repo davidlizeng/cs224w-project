@@ -13,10 +13,10 @@ for idStr, count in tempTopTags.items():
   topTags[int(idStr)] = count
 
 userGraph = {}
-alpha = 0
-beta = 0
-gamma = 0
-delta = 0
+alpha = 0.6
+beta = 0.0
+gamma = 0.2
+delta = 0.4
 
 def normalizeScores(tagPredict):
   maxScore = tagPredict[max(tagPredict, key=lambda x: tagPredict[x])]
@@ -34,7 +34,11 @@ def recall_k(k, bestTags, actualTags):
       recall_score += 1.0
   return recall_score / len(actualTags)
 
-def getTagPredictions(qid, question, topTags):
+def createUserGraph(trainQuestions):
+  userGraph = bipartite.getGraph(loadData.users, trainQuestions, loadData.answers, loadData.comments)
+  return userGraph
+  
+def getTagPredictions(qid, question, userGraph, topTags):
   bestAnswerId = question.bestAnswerId
   answers = question.answers
   comments = question.comments
@@ -59,12 +63,12 @@ def getTagPredictions(qid, question, topTags):
   normalizeScores(tagPredict)
   return tagPredict
 
-def modelUserGraph(testQuestions, topTags):
+def modelUserGraph(testQuestions, userGraph, topTags):
   numTest = len(testQuestions)
   recall_5_sum = 0.0
   recall_10_sum = 0.0
   for (qid, question) in testQuestions.items():
-    tagD = getTagPredictions(qid, question, topTags)
+    tagD = getTagPredictions(qid, question, userGraph, topTags)
     sortedTags = sorted(tagD, key=lambda x: tagD[x], reverse=True)
     num = min(10, len(sortedTags))
     bestTags = sortedTags[0:num]
@@ -75,7 +79,7 @@ def modelUserGraph(testQuestions, topTags):
   recall_5_avg = recall_5_sum / numTest
   recall_10_avg = recall_10_sum / numTest
   return recall_5_avg, recall_10_avg
-
+"""
 bestRecall5 = 0
 bestRecall10 = 0
 bestAlpha5 = 0
@@ -92,7 +96,7 @@ bestDelta10 = 0
 #BEST RECALL@10 PARAMETERS: (0.600000, 0.000000, 0.200000, 0.400000)
 for fold in folds:
   trainQuestions = fold[0]
-  userGraph = bipartite.getGraph(loadData.users, trainQuestions, loadData.answers, loadData.comments)
+  userGraph = createUserGraph(trainQuestions)
   testQuestions = fold[1]
   for alpha in xrange(6):
     alpha = alpha * 0.2
@@ -102,7 +106,11 @@ for fold in folds:
         gamma = gamma * 0.2
         for delta in xrange(6):
           delta = delta * 0.2
-          recall_5, recall_10 = modelUserGraph(testQuestions, topTags)
+          alpha = 0.6
+          beta = 0.0
+          gamma = 0.2
+          delta = 0.4
+          recall_5, recall_10 = modelUserGraph(testQuestions, userGraph, topTags)
           if recall_5 > bestRecall5:
             bestRecall5 = recall_5
             bestAlpha5 = alpha
@@ -122,5 +130,5 @@ for fold in folds:
   print 'BEST RECALL@5 PARAMETERS: (%f, %f, %f, %f)' % (bestAlpha5, bestBeta5, bestGamma5, bestDelta5)
   print 'BEST RECALL@10 :' + str(bestRecall10)
   print 'BEST RECALL@10 PARAMETERS: (%f, %f, %f, %f)' % (bestAlpha10, bestBeta10, bestGamma10, bestDelta10)
-  
+"""
 
