@@ -15,4 +15,4 @@ set ylabel "Count"
 set tics scale 2
 set terminal png size 1000,800
 set output 'similarity_degdistr.png'
-plot "similarity_degdistr.tab" with points pt 6 lt rgb "red"
+plot "similarity_degdistr.tab" with points pt 6 lt rgb "green"
