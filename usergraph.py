@@ -12,7 +12,7 @@ topTags = {}
 for idStr, count in tempTopTags.items():
   topTags[int(idStr)] = count
 
-userGraph = bipartite.getBipartiteGraph()
+userGraph = {}
 alpha = 0
 beta = 0
 gamma = 0
@@ -87,8 +87,10 @@ bestBeta10 = 0
 bestGamma10  = 0
 bestDelta10 = 0
 for fold in folds:
+  trainQuestions = fold[0]
+  userGraph = bipartite.getGraph(loadData.users, trainQuestions, loadData.answers, loadData.comments)
   testQuestions = fold[1]
-  for alpha in xrange(6):
+  for alpha in xrange(2,6):
     alpha = alpha * 0.2
     for beta in xrange(1):
       beta = beta * 0.2
