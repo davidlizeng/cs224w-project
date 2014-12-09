@@ -225,12 +225,13 @@ def loadComments():
   print "Loading Comments Complete"
 
 
-def loadData():
+def loadData(answersComments=False):
   loadUsers()
   loadTags()
   loadQuestions(50000, True)
-  # loadAnswers()
-  # loadComments()
+  if answersComments:
+    loadAnswers()
+    loadComments()
 
 def getCVFolds():
   folds = []
@@ -250,6 +251,21 @@ def getCVFolds():
   return folds
 
 
+def getUsersSubset(users, questions, answers, comments):
+  subset = {}
+  for id, question in questions.iteritems():
+    userId = question.userId
+    if userId not in subset:
+      subset[userId] = users[userId]
+  for id, answer in answers.iteritems():
+    userId = answer.userId
+    if userId not in subset:
+      subset[userId] = users[userId]
+  for id, comment in comments.iteritems():
+    userId = comment.userId
+    if userId not in subset:
+      subset[userId] = users[userId]
+  return subset
 
 
 

@@ -3,24 +3,6 @@ import numpy as np
 import random
 from collections import defaultdict
 
-
-def getUsersSubset(users, questions, answers, comments):
-  subset = {}
-  for id, question in questions.iteritems():
-    userId = question.userId
-    if userId not in subset:
-      subset[userId] = users[userId]
-  for id, answer in answers.iteritems():
-    userId = answer.userId
-    if userId not in subset:
-      subset[userId] = users[userId]
-  for id, comment in comments.iteritems():
-    userId = comment.userId
-    if userId not in subset:
-      subset[userId] = users[userId]
-  return subset
-
-
 def createUsersGraph(users, questions, answers, comments):
   graph = snap.TUNGraph.New()
   for id, user in users.iteritems():
