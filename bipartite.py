@@ -22,24 +22,24 @@ def getGraph(users, trainQuestions, answers, comments):
     d = {}
     user = users[userID]
     for qid in user.questions:
-      question = questions.get(qid, None)
+      question = trainQuestions.get(qid, None)
       if question:
         for tid in question.tags:
           d[tid] = d.get(tid, 0.0) + BIPARTITE_QUESTION_SCORE
     for aid in user.answers:
-      question = questions.get(answers[aid].questionId, None)
+      question = trainQuestions.get(answers[aid].questionId, None)
       if question:
         for tid in question.tags:
           d[tid] = d.get(tid, 0.0) + BIPARTITE_ANSWER_SCORE
     for cid in user.comments:
       postID = comments[cid].postId
-      if postID in questions:
-        question = questions.get(postID, None)
+      if postID in trainQuestions:
+        question = trainQuestions.get(postID, None)
         if question:
           for tid in question.tags:
             d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
-      else:
-        question = questions.get(answers[postID].questionId, None)
+      else if postID in answers:
+        question = trainQuestions.get(answers[postID].questionId, None)
         if question:
           for tid in question.tags:
             d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
