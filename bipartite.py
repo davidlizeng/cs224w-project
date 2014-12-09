@@ -13,7 +13,8 @@ BIPARTITE_ANSWER_SCORE = 0.7
 BIPARTITE_COMMENT_SCORE = 0.1
 
 # User id to dictionary of (int tagID) : (float score)
-def getGraph(users, questions, answers, comments):
+# If passing in a subset (trainQuestions), still include ALL answers and comments
+def getGraph(users, trainQuestions, answers, comments):
   graph = {}
 
   counter = 0
@@ -21,23 +22,27 @@ def getGraph(users, questions, answers, comments):
     d = {}
     user = users[userID]
     for qid in user.questions:
-      question = questions[qid]
-      for tid in question.tags:
-        d[tid] = d.get(tid, 0.0) + BIPARTITE_QUESTION_SCORE
+      question = questions.get(qid, None)
+      if question:
+        for tid in question.tags:
+          d[tid] = d.get(tid, 0.0) + BIPARTITE_QUESTION_SCORE
     for aid in user.answers:
-      question = questions[answers[aid].questionId]
-      for tid in question.tags:
-        d[tid] = d.get(tid, 0.0) + BIPARTITE_ANSWER_SCORE
+      question = questions.get(answers[aid].questionId, None)
+      if question:
+        for tid in question.tags:
+          d[tid] = d.get(tid, 0.0) + BIPARTITE_ANSWER_SCORE
     for cid in user.comments:
       postID = comments[cid].postId
       if postID in questions:
-        question = questions[postID]
-        for tid in question.tags:
-          d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
+        question = questions.get(postID, None)
+        if question:
+          for tid in question.tags:
+            d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
       else:
-        question = questions[answers[postID].questionId]
-        for tid in question.tags:
-          d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
+        question = questions.get(answers[postID].questionId, None)
+        if question:
+          for tid in question.tags:
+            d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
     graph[userID] = d
     counter += 1
     if counter % 5000 == 0:
