@@ -86,11 +86,15 @@ bestAlpha10 = 0
 bestBeta10 = 0
 bestGamma10  = 0
 bestDelta10 = 0
+#BEST RECALL@5 :0.342433333333
+#BEST RECALL@5 PARAMETERS: (0.800000, 0.000000, 0.200000, 0.400000)
+#BEST RECALL@10 :0.41831
+#BEST RECALL@10 PARAMETERS: (0.600000, 0.000000, 0.200000, 0.400000)
 for fold in folds:
   trainQuestions = fold[0]
   userGraph = bipartite.getGraph(loadData.users, trainQuestions, loadData.answers, loadData.comments)
   testQuestions = fold[1]
-  for alpha in xrange(2,6):
+  for alpha in xrange(6):
     alpha = alpha * 0.2
     for beta in xrange(1):
       beta = beta * 0.2

@@ -17,6 +17,7 @@ BIPARTITE_COMMENT_SCORE = 0.1
 def getGraph(users, trainQuestions, answers, comments):
   graph = {}
 
+  s = ld.getUsersSubset(ld.users, ld.questions, ld.answers, ld.comments)
   counter = 0
   for userID in s.keys():
     d = {}
@@ -38,7 +39,7 @@ def getGraph(users, trainQuestions, answers, comments):
         if question:
           for tid in question.tags:
             d[tid] = d.get(tid, 0.0) + BIPARTITE_COMMENT_SCORE
-      else if postID in answers:
+      elif postID in answers:
         question = trainQuestions.get(answers[postID].questionId, None)
         if question:
           for tid in question.tags:
