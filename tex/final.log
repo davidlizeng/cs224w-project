@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.7.17)  9 DEC 2014 05:01
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.7.17)  9 DEC 2014 11:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -312,50 +312,145 @@ Missing character: There is no ™ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 44.
-
-(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Underfull \hbox (badness 10000) in paragraph at lines 44--45
-
- []
 
 [1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-<tagsynonyms_so.jpg, id=13, 518.93875pt x 483.8075pt>
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 53.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+Underfull \hbox (badness 1436) in paragraph at lines 53--54
+\OT1/ptm/m/n/10 to \OT1/pcr/m/n/10 .net-3.5 \OT1/ptm/m/n/10 could com-pletely m
+iss the highly-related
+ []
+
+
+Underfull \hbox (badness 4181) in paragraph at lines 53--54
+\OT1/ptm/m/n/10 ques-tions tagged with \OT1/pcr/m/n/10 .net-framework-3.5\OT1/p
+tm/m/n/10 . While
+ []
+
+
+Underfull \hbox (badness 1418) in paragraph at lines 53--54
+\OT1/ptm/m/n/10 done man-u-ally by vol-un-teer con-trib-u-tors, there are still
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+
+ []
+
+<tagsynonyms_so.jpg, id=12, 518.93875pt x 483.8075pt>
 File: tagsynonyms_so.jpg Graphic file (type jpg)
  <use tagsynonyms_so.jpg>
-Package pdftex.def Info: tagsynonyms_so.jpg used on input line 48.
+Package pdftex.def Info: tagsynonyms_so.jpg used on input line 57.
 (pdftex.def)             Requested size: 231.26378pt x 215.6074pt.
 
-[2 <./tagsynonyms_so.jpg>] [3] (./final.aux) ) 
+[2 <./tagsynonyms_so.jpg>]
+<similarity_degdistr.png, id=17, 752.8125pt x 602.25pt>
+File: similarity_degdistr.png Graphic file (type png)
+
+<use similarity_degdistr.png>
+Package pdftex.def Info: similarity_degdistr.png used on input line 74.
+(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+
+Underfull \hbox (badness 3460) in paragraph at lines 79--81
+[]\OT1/ptm/m/n/10 We no-tice that this de-gree dis-tri-bu-tion looks much
+ []
+
+
+Underfull \hbox (badness 1389) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 like a power law dis-tri-bu-tion. Most ques-tions are only
+ []
+
+
+Underfull \hbox (badness 6859) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 sim-i-lar to a few other ques-tions on Stack-Over-flow,
+ []
+
+
+Underfull \hbox (badness 6412) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 while a few ques-tions are sim-i-lar to many oth-ers.
+ []
+
+
+Underfull \hbox (badness 3364) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 In par-tic-u-lar, we can ob-serve the kinds of ques-tions
+ []
+
+
+Underfull \hbox (badness 5022) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 that are sim-i-lar to many oth-ers. Here is one such
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 79--81
+\OT1/ptm/m/n/10 ques-tion: http://stackoverflow.com/questions/121656/regular-
+ []
+
+<user_degdistr.png, id=18, 752.8125pt x 602.25pt>
+File: user_degdistr.png Graphic file (type png)
+ <use user_degdistr.png>
+Package pdftex.def Info: user_degdistr.png used on input line 88.
+(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+[3 <./similarity_degdistr.png> <./user_degdistr.png>]
+<bipartite_degdistr.png, id=24, 602.25pt x 451.6875pt>
+File: bipartite_degdistr.png Graphic file (type png)
+
+<use bipartite_degdistr.png>
+Package pdftex.def Info: bipartite_degdistr.png used on input line 104.
+(pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
+ [4 <./bipartite_degdistr.png>] [5
+
+] (./final.aux) ) 
 Here is how much of TeX's memory you used:
- 3617 strings out of 493315
- 53817 string characters out of 6137904
- 125130 words of memory out of 5000000
- 7021 multiletter control sequences out of 15000+600000
- 39442 words of font info for 72 fonts, out of 8000000 for 9000
+ 3644 strings out of 493315
+ 54290 string characters out of 6137904
+ 126160 words of memory out of 5000000
+ 7041 multiletter control sequences out of 15000+600000
+ 40369 words of font info for 75 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,8n,23p,1279b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2013/texmf-di
-st/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2013/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr7.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/courie
-r/ucrr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.p
-fb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/
-local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texl
-ive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on final.pdf (3 pages, 175242 bytes).
+ 37i,8n,23p,1595b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.en
+c}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></u
+sr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/lo
+cal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
+al/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texli
+ve/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/te
+xmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/
+fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on final.pdf (5 pages, 227309 bytes).
 PDF statistics:
- 60 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 76 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
