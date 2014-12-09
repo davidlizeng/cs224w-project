@@ -18,6 +18,11 @@ topTags = {}
 for idStr, count in tempTopTags.iteritems():
   topTags[int(idStr)] = count
 
+# Dict of question ID (int) to set of tag IDs (ints) which include synonyms
+questionTagsSyn = {}
+# Dict of question ID (int) to size (int) of question tag list only including popular tags
+questionTagsPopOnly = {}
+
 # Get rid of these once api is established
 communityD = {}
 # Multinomial Naive Bayes Model:
@@ -29,6 +34,35 @@ tagTermDCache = {}
 # Similarity model: precomputed for each fold iteration
 sim_model = {}
 similarityDCache = {}
+
+
+def setQuestionModelModifications(allQuestions):
+  global questionTagsSyn
+  global questionTagsPopOnly
+  print 'Setting question modifications'
+  infile = open('synonyms.txt', 'r')
+  tagSyns = {}
+  while True:
+    s = infile.readline()
+    if not s:
+      break
+    data = set([int(d) for d in s.split()])
+    for tid in data:
+      assert tid in topTags
+      tagSyns[tid] = data
+  for qid, question in allQuestions.iteritems():
+    currentTags = question.tags
+    newTags = set()
+    count = 0
+    for tid in currentTags:
+      newTags.add(tid)
+      if tid in tagSyns:
+        newTags |= tagSyns[tid]
+      if tid in topTags:
+        count += 1
+    questionTagsSyn[qid] = newTags
+    questionTagsPopOnly[qid] = count
+  print 'Done with modifications'
 
 
 def resetModels():
@@ -70,13 +104,19 @@ def computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions):
   return comTagCombineD
 
 
-def recall_k(k, topTags, actualTags):
+# Returns tuple of (scoreAllTags, scorePopularTagsOnly)
+def recall_k(k, topTags, actualTags, qid, denominator):
   recall_score = 0.0
   num = min(len(topTags),k)
   for i in xrange(num):
     if topTags[i] in actualTags:
       recall_score += 1.0
-  return recall_score / len(actualTags)
+  r = recall_score / denominator
+  if questionTagsPopOnly[qid] == 0:
+    rPop = 0
+  else:
+    rPop = recall_score / questionTagsPopOnly[qid]
+  return (r, rPop)
 
 
 def updateParameters(alpha, beta, gamma, delta, bestParams):
@@ -92,7 +132,6 @@ recall@5 and recall@10. Returns the best params for recall@5 and recall@10 and
 the corresponding parameters
 """
 def comTagCombineModelTrain(trainQuestions):
-  # Tag affinity precomputation
   global tagaff_ttas
   global mnbd
   global sim_model
@@ -100,7 +139,7 @@ def comTagCombineModelTrain(trainQuestions):
   mnbd = nbtext.getTagNaiveBayesScores(trainQuestions, topTags, wordToIndex, wordVecs)
   print "Naive Bayes Training Complete"
   print "Begin Tag Affinity Training"
-  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False, frequentWords=frequentWords)
+  tagaff_ttas = tagaffinity.getTagTermAffinityScores(trainQuestions, includeCounts=False)
   print "Tag Affinity Training Complete"
   sim_model = similarity.similarityModel(trainQuestions, wordVecs)
   print "Similarity Training Complete"
@@ -111,7 +150,7 @@ Evaluates the recall@5 and recall@10 scores using the input parameters for each
 on the input test data set. Returns the recall@5 score and the recall@10 score.
 """
 def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
-  best_recall_5_avg, best_recall_10_avg = 0.0, 0.0
+  best_r5_avg, best_r10_avg = 0.0, 0.0
   bestParams5 = [-1.0, -1.0, -1.0, -1.0]
   bestParams10 = [-1.0, -1.0, -1.0, -1.0]
   for alpha in xrange(6):
@@ -120,41 +159,62 @@ def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
       beta = beta * 0.2
       for gamma in xrange(6):
         gamma = gamma * 0.2
-        for delta in xrange(6):
+        for delta in xrange(1):   ## CHANGE THIS LATER
           delta = delta * 0.2
 
-          recall_5_sum = 0.0
-          recall_10_sum = 0.0
-          for (qid, question) in testQuestions.items():
+          (r5_sum, r5pop_sum) = (0.0, 0.0)
+          (r10_sum, r10pop_sum) = (0.0, 0.0)
+          (r5syn_sum, r5synpop_sum) = (0.0, 0.0)
+          (r10syn_sum, r10synpop_sum) = (0.0, 0.0)
+          for (qid, question) in testQuestions.iteritems():
             comTagCombineD = computeComTagCombineD(alpha, beta, gamma, delta, question, trainQuestions)
             sortedTags = sorted(comTagCombineD, key=lambda x: comTagCombineD[x], reverse=True)
             num = min(10, len(sortedTags))
             topTags = sortedTags[0:num]
-            recall_5 = recall_k(5, topTags, question.tags)
-            recall_10 = recall_k(10, topTags, question.tags)
-            recall_5_sum += recall_5
-            recall_10_sum += recall_10
+            (r5, r5pop) = recall_k(5, topTags, question.tags, qid, len(question.tags))
+            (r10, r10pop) = recall_k(10, topTags, question.tags, qid, len(question.tags))
+            (r5syn, r5synpop) = recall_k(5, topTags, questionTagsSyn[qid], qid, len(question.tags))
+            (r10syn, r10synpop) = recall_k(10, topTags, questionTagsSyn[qid], qid, len(question.tags))
+            r5_sum += r5
+            r5pop_sum += r5pop
+            r5syn_sum += r5syn
+            r5synpop_sum += r5synpop
+            r10_sum += r10
+            r10pop_sum += r10pop
+            r10syn_sum += r10syn
+            r10synpop_sum += r10synpop
 
-          recall_5_avg = recall_5_sum / len(testQuestions)
-          recall_10_avg = recall_10_sum / len(testQuestions)
-          if recall_5_avg > best_recall_5_avg:
-            best_recall_5_avg = recall_5_avg
+          r5_avg = r5_sum / len(testQuestions)
+          r5pop_avg = r5pop_sum / len(testQuestions)
+          r5syn_avg = r5syn_sum / len(testQuestions)
+          r5synpop_avg = r5synpop_sum / len(testQuestions)
+          r10_avg = r10_sum / len(testQuestions)
+          r10pop_avg = r10pop_sum / len(testQuestions)
+          r10syn_avg = r10syn_sum / len(testQuestions)
+          r10synpop_avg = r10synpop_sum / len(testQuestions)
+          if r5_avg > best_r5_avg:
+            best_r5_avg = r5_avg
             updateParameters(alpha, beta, gamma, delta, bestParams5)
-          if recall_10_avg > best_recall_10_avg:
-            best_recall_10_avg = recall_10_avg
+          if r10_avg > best_r10_avg:
+            best_r10_avg = r10_avg
             updateParameters(alpha, beta, gamma, delta, bestParams10)
-          print '(%f, %f, %f, %f): r5 = %f, r10 = %f' % (alpha, beta, gamma, delta, recall_5_avg, recall_10_avg)
+          r5_tuple = (r5_avg, r5pop_avg, r5syn_avg, r5synpop_avg)
+          r10_tuple = (r10_avg, r10pop_avg, r10syn_avg, r10synpop_avg)
+          print '(%f, %f, %f, %f): r5 = %s, r10 = %s' % (alpha, beta, gamma, delta, r5_tuple, r10_tuple)
           if outfile:
-            outfile.write('%f,%f,%f,%f,%f,%f\n' % (alpha, beta, gamma, delta, recall_5_avg, recall_10_avg))
+            outfile.write('%f,%f,%f,%f,%s,%s\n' % (alpha, beta, gamma, delta, r5_tuple, r10_tuple))
 
-  return bestParams5, best_recall_5_avg, bestParams10, best_recall_10_avg
+  return bestParams5, best_r5_avg, bestParams10, best_r10_avg
 
-## Comment out this block if not running from Python shell
+## Comment out this entire block if not running from Python shell
 ld.loadData()
+# This function must be run. Be careful if this is commented out.
+setQuestionModelModifications(ld.questions)
 folds = ld.getCVFolds()
 print 'Generating word vectors'
 frequentWords, wordToIndex = wordvectors.getFrequentWords(ld.questions)
 wordVecs = wordvectors.getWordVectors(ld.questions, wordToIndex)
+## End block
 
 counter = 0
 recall_test_scores = [0.0, 0.0]
@@ -165,6 +225,7 @@ for fold in folds:
   trainQuestions = fold[0]
   print 'Fold size %d' % len(fold[0])
   comTagCombineModelTrain(trainQuestions)
+  print 'Train complete. Beginning test.'
   testQuestions = fold[1]
   outfile = open('temp/ctc-out_%d.csv' % counter, 'w+')
   params5, score5, params10, score10 = comTagCombineModelTest(trainQuestions, testQuestions, outfile)
