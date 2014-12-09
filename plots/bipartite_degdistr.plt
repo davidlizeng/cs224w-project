@@ -7,7 +7,7 @@ set mxtics 10
 set mytics 10
 set grid
 set xlabel "# Tags (Degree)"
-set ylabel "Frequency"
+set ylabel "Count"
 set terminal png size 800,600
 set output 'bipartite_degdistr.png'
 
