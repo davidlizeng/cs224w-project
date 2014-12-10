@@ -1,11 +1,11 @@
 
-set title "TagCombine (Alpha = 0.6, Beta = 0.6): Gamma vs. recall@5"
+set title "NetTagCombine (Alpha = 0.4, Beta = 0.4, Gamma = 1.0): Delta vs. recall@5"
 set key off
 set grid
-set xlabel "Gamma"
+set xlabel "Delta"
 set ylabel "recall@5"
 set terminal png size 800,600
-set output 'tc_gamma.png'
+set output 'ntc_delta.png'
 
-plot "ntc_output.tab" with linespoints pt 6 lt rgb "green"
+plot "ntc_output.tab" with linespoints pt 6 lt rgb "orange"
 

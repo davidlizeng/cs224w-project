@@ -10,7 +10,7 @@ def parseOutputLine(line):
   return re.split(r',\(|\),\(|\)|, |,', line)[:-1]
 
 def getMap():
-  infile = open('../output_tc.txt', 'r')
+  infile = open('../output_ntc.txt', 'r')
   m = {}
   while True:
     s = infile.readline()
@@ -35,11 +35,12 @@ def getBestForIndex(m, index):
   return ((best5, b5p), (best10, b10p))
 
 # Recall@5 avg tc (.6, .6, .8, .0)
+# Recall@5 avg ntc (.4, .4, 1.0, .6)
 def outputGraph(m, index):
   outfile = open('ntc_output.tab', 'w+')
   for var in xrange(6):
     v = round(var * 0.2, 1)
-    t = (.6, .6, v, 0.)
+    t = (.4, .4, 1.0, v)
     (score5, score10) = m[t]
     outfile.write('%f %f\n' % (v, score5[index]))
   outfile.close()

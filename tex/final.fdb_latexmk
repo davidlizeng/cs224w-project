@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1418168292 "final.tex" "final.pdf" "final" 1418168293
+["pdflatex"] 1418175319 "final.tex" "final.pdf" "final" 1418175321
   "/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/etexcmds.sty" 1335995445 7612 c47308d923ec19888707b0f1792b326a ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifluatex.sty" 1303254447 7324 11d14f318d865f420e692d4e6c9c18c3 ""
@@ -36,12 +36,15 @@
   "/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
   "/usr/local/texlive/2013/texmf-dist/tex/latex/url/url.sty" 1264379145 21932 e3a9cf32ee9b853b42be14c2f25b873c ""
   "bipartite_degdistr.png" 1418120541 10358 427654eaa0e2000c4238734fd7fd6ac7 ""
-  "final.aux" 1418168293 3141 ac036237a2d4ad16a59a63bfd7f75550 ""
-  "final.tex" 1418168278 24491 873fb342d5489aff2c387155679d3189 ""
+  "final.aux" 1418175320 4252 08eac90e888c9a2c1c3adef47d229da3 ""
+  "final.tex" 1418175319 38474 d4481dbf748ceaa1d4dfed783d2ced90 ""
   "similarity_degdistr.png" 1418120588 12821 d9ab50e7a136e26d1cf53dba0625390b ""
   "tagsynonyms_so.jpg" 1418113188 51352 5d3e04bf5789917b5751147493e92041 ""
+  "tc_alpha.png" 1418167083 9020 2a5fe16723c291146618ca4c1a94fa20 ""
+  "tc_beta.png" 1418167185 8988 96957068a6daa99264e90b48860116b6 ""
+  "tc_gamma.png" 1418167228 9314 aa2b430e1e4b0b8d627f30f926cd4d33 ""
   "user_degdistr.png" 1418120565 11466 5dff719ecb75f67e23cd6cdeca112096 ""
   (generated)
-  "final.pdf"
   "final.log"
+  "final.pdf"
   "final.aux"
