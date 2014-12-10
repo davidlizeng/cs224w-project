@@ -1,4 +1,4 @@
-\documentclass[10pt]{IEEEtran}
+\documentclass[11pt]{IEEEtran}
 % correct bad hyphenation here
 %\hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -7,6 +7,14 @@
 \makeatletter
 \newcommand{\removelatexerror}{\let\@latex@error\@gobble}
 \makeatother
+
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
 
 \begin{document}
 

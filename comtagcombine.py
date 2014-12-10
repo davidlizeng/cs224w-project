@@ -222,7 +222,7 @@ def comTagCombineModelTest(trainQuestions, testQuestions, outfile=None):
   return bestParams5, best_r5_avg, bestParams10, best_r10_avg
 
 ## Comment out this entire block if not running from Python shell
-ld.loadData()
+ld.loadData(True)
 # This function must be run. Be careful if this is commented out.
 setQuestionModelModifications(ld.questions)
 folds = ld.getCVFolds()
