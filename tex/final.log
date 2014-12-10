@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.7.17)  9 DEC 2014 17:35
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.7.17)  9 DEC 2014 21:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -23,13 +23,17 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 -- Using 8.5in x 11in (letter) paper.
 -- Using PDF output.
 \@IEEEnormalsizeunitybaselineskip=\dimen104
--- This is an 11 point document.
+-- This is a 10 point document.
 \CLASSINFOnormalsizebaselineskip=\dimen105
 \CLASSINFOnormalsizeunitybaselineskip=\dimen106
 \IEEEnormaljot=\dimen107
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 726.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <6> not available
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 726.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 726.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 726.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 726.
@@ -219,6 +223,9 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen126
 \Gin@req@width=\dimen127
 )
+(/usr/local/texlive/2013/texmf-dist/tex/latex/was/icomma.sty
+Package: icomma 2002/03/10 v2.0 (WaS)
+)
 (/usr/local/texlive/2013/texmf-dist/tex/latex/multirow/multirow.sty
 \bigstrutjot=\dimen128
 )
@@ -228,18 +235,18 @@ Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 ) (./final.aux)
 \openout1 = `final.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
 (/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -302,7 +309,9 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 44.
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
@@ -311,110 +320,88 @@ Missing character: There is no ™ in font ptmr7t!
 
 
 ]
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ™ in font ptmr7t!
-
-Underfull \vbox (badness 2088) has occurred while \output is active []
-
- [2]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 71.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 65.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 3199) in paragraph at lines 71--72
-\OT1/ptm/m/n/11 as \OT1/pcr/m/n/11 .net-3.5 \OT1/ptm/m/n/11 and \OT1/pcr/m/n/11
- .net-framework-3.5\OT1/ptm/m/n/11 . Tag
- []
-
-
-Underfull \hbox (badness 1540) in paragraph at lines 71--72
-\OT1/ptm/m/n/11 tag rec-om-men-da-tion sys-tem to help pre-vent fu-ture
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 71--72
-
- []
-
-<tagsynonyms_so.jpg, id=15, 518.93875pt x 483.8075pt>
+<tagsynonyms_so.jpg, id=12, 518.93875pt x 483.8075pt>
 File: tagsynonyms_so.jpg Graphic file (type jpg)
  <use tagsynonyms_so.jpg>
-Package pdftex.def Info: tagsynonyms_so.jpg used on input line 75.
+Package pdftex.def Info: tagsynonyms_so.jpg used on input line 73.
 (pdftex.def)             Requested size: 231.26378pt x 215.6074pt.
-
-<similarity_degdistr.png, id=16, 752.8125pt x 602.25pt>
-File: similarity_degdistr.png Graphic file (type png)
-
-<use similarity_degdistr.png>
-Package pdftex.def Info: similarity_degdistr.png used on input line 92.
-(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ™ in font ptmr7t!
- [3 <./tagsynonyms_so.jpg> <./similarity_degdistr.png>] <user_degdistr.png, id=
-22, 752.8125pt x 602.25pt>
-File: user_degdistr.png Graphic file (type png)
-
-<use user_degdistr.png>
-Package pdftex.def Info: user_degdistr.png used on input line 106.
-(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ™ in font ptmr7t!
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ™ in font ptmr7t!
-Missing character: There is no â in font ptmr7t!
-Missing character: There is no € in font ptmr7t!
-Missing character: There is no ™ in font ptmr7t!
- <bipartite_degdistr.png, id=23, 602.25pt x 451.6875pt>
-File: bipartite_degdistr.png Graphic file (type png)
-
-<use bipartite_degdistr.png>
-Package pdftex.def Info: bipartite_degdistr.png used on input line 122.
-(pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[4 <./user_degdistr.png>]
-Underfull \hbox (badness 1715) in paragraph at lines 150--152
-\OT1/ptm/m/n/11 Using this co-sine sim-i-lar-ity for-mula, we can find
- []
+[2] <similarity_degdistr.png, id=17, 752.8125pt x 602.25pt>
+File: similarity_degdistr.png Graphic file (type png)
+
+<use similarity_degdistr.png>
+Package pdftex.def Info: similarity_degdistr.png used on input line 90.
+(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
 
 
-Underfull \hbox (badness 2600) in paragraph at lines 150--152
-\OML/cmm/m/it/10.95 p[]; [] ; p[]$\OT1/ptm/m/n/11 , the $\OT1/cmr/m/n/10.95 50$
- \OT1/ptm/m/n/11 most sim-i-lar posts to $\OML/cmm/m/it/10.95 q$\OT1/ptm/m/n/11
- . Let
- []
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<question_so.jpg, id=18, 752.8125pt x 326.21875pt>
+File: question_so.jpg Graphic file (type jpg)
+ <use question_so.jpg>
+Package pdftex.def Info: question_so.jpg used on input line 99.
+(pdftex.def)             Requested size: 231.26378pt x 100.21584pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-[5 <./bipartite_degdistr.png>]
-Overfull \hbox (23.69441pt too wide) in paragraph at lines 179--186
- [] 
- []
+<user_degdistr.png, id=19, 752.8125pt x 602.25pt>
+File: user_degdistr.png Graphic file (type png)
+ <use user_degdistr.png>
+Package pdftex.def Info: user_degdistr.png used on input line 112.
+(pdftex.def)             Requested size: 231.26378pt x 185.01387pt.
 
-<tc_alpha.png, id=38, 602.25pt x 451.6875pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3 <./tagsynonyms_so.jpg> <./similarity_degdistr.png> <./question_so.jpg>]
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+
+<bipartite_degdistr.png, id=24, 602.25pt x 451.6875pt>
+File: bipartite_degdistr.png Graphic file (type png)
+
+<use bipartite_degdistr.png>
+Package pdftex.def Info: bipartite_degdistr.png used on input line 127.
+(pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
+ [4 <./user_degdistr.png> <./bipartite_degdistr.png>]
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+ [5] <tc_alpha.png, id=38, 602.25pt x 451.6875pt>
 File: tc_alpha.png Graphic file (type png)
  <use tc_alpha.png>
-Package pdftex.def Info: tc_alpha.png used on input line 194.
+Package pdftex.def Info: tc_alpha.png used on input line 197.
 (pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
 
 <tc_beta.png, id=39, 602.25pt x 451.6875pt>
 File: tc_beta.png Graphic file (type png)
  <use tc_beta.png>
-Package pdftex.def Info: tc_beta.png used on input line 201.
+Package pdftex.def Info: tc_beta.png used on input line 203.
 (pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
 
 <tc_gamma.png, id=40, 602.25pt x 451.6875pt>
 File: tc_gamma.png Graphic file (type png)
  <use tc_gamma.png>
-Package pdftex.def Info: tc_gamma.png used on input line 208.
+Package pdftex.def Info: tc_gamma.png used on input line 209.
 (pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
 
 
@@ -423,45 +410,43 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-[6 <./tc_alpha.png> <./tc_beta.png>]
 Missing character: There is no â in font ptmr7t!
 Missing character: There is no € in font ptmr7t!
 Missing character: There is no ™ in font ptmr7t!
-
-Overfull \hbox (6.71634pt too wide) detected at line 229
-\OML/cmm/m/it/10.95 L\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 g; q\OT1/cmr/m/n/1
-0.95 ) = []
- []
-
-[7 <./tc_gamma.png>] [8] [9
+[6 <./tc_alpha.png> <./tc_beta.png> <./tc_gamma.png>]
+<ntc_delta.png, id=47, 602.25pt x 451.6875pt>
+File: ntc_delta.png Graphic file (type png)
+ <use ntc_delta.png>
+Package pdftex.def Info: ntc_delta.png used on input line 289.
+(pdftex.def)             Requested size: 231.26378pt x 173.44878pt.
+ [7 <./ntc_delta.png>] [8] [9
 
 ] (./final.aux) ) 
 Here is how much of TeX's memory you used:
- 3685 strings out of 493315
- 54888 string characters out of 6137904
- 125202 words of memory out of 5000000
- 7075 multiletter control sequences out of 15000+600000
- 42405 words of font info for 81 fonts, out of 8000000 for 9000
+ 3678 strings out of 493315
+ 54937 string characters out of 6137904
+ 129287 words of memory out of 5000000
+ 7069 multiletter control sequences out of 15000+600000
+ 39442 words of font info for 72 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,8n,23p,1805b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,8n,23p,1804b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.en
-c}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
-></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
-/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
-sr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
-/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/lo
-cal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
-al/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
-/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive
-/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texm
-f-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/fo
-nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/
-urw/times/utmri8a.pfb>
-Output written on final.pdf (9 pages, 274644 bytes).
+c}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></
+usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/l
+ocal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/lo
+cal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/loca
+l/texlive/2013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texliv
+e/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/tex
+mf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/f
+onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1
+/urw/times/utmri8a.pfb>
+Output written on final.pdf (9 pages, 355845 bytes).
 PDF statistics:
- 100 PDF objects out of 1000 (max. 8388607)
- 62 compressed objects within 1 object stream
+ 99 PDF objects out of 1000 (max. 8388607)
+ 59 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
